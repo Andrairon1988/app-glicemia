@@ -11,6 +11,10 @@ import { obterMedicao } from "@/lib/medicoes";
 
 export const metadata: Metadata = { title: "Editar medição · Glicemia" };
 
+// Telas com dados do usuário logado: sempre carregadas na hora do acesso
+// (sem pré-carregamento), por isso ficam fora da validação de "navegação instantânea".
+export const instant = false;
+
 export default function EditarMedicaoPage({ params }: PageProps<"/medicoes/[id]/editar">) {
   return (
     <>

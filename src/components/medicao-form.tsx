@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useLayoutEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -68,24 +68,19 @@ export function MedicaoForm({ inicial }: { inicial?: MedicaoInicial }) {
     formState: { errors, isSubmitting },
   } = useForm<Entrada, unknown, Saida>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
-      valor_mg_dl: inicial ? String(inicial.valor_mg_dl) : "",
-      data_hora: "",
-      momento: inicial?.momento ?? "jejum",
-      medicamento: inicial?.medicamento ?? "",
-      dose: inicial?.dose ?? "",
-      observacao: inicial?.observacao ?? "",
-    },
+    defaultValues: valoresIniciais(inicial, null),
   });
 
-  // Data/hora e momento dependem do relógio do aparelho: preenchidos após abrir a tela.
-  useEffect(() => {
-    const agora = new Date();
-    reset((atual) => ({
-      ...atual,
-      data_hora: paraCampoDataHora(inicial ? new Date(inicial.medido_em) : agora),
-      momento: inicial?.momento ?? sugerirMomento(agora),
-    }));
+  // O Next.js 16 não destrói a tela ao navegar: ele a esconde e a mostra de novo
+  // como estava. Para um formulário de registro isso não é desejado, então:
+  //  - ao ficar visível: formulário limpo, com data/hora atuais do aparelho;
+  //  - ao ficar escondido: some o alerta e a mensagem de erro.
+  useLayoutEffect(() => {
+    reset(valoresIniciais(inicial, new Date()));
+    return () => {
+      setAlerta(null);
+      setMensagem(null);
+    };
   }, [inicial, reset]);
 
   async function enviar(dados: Saida) {
@@ -235,6 +230,22 @@ export function MedicaoForm({ inicial }: { inicial?: MedicaoInicial }) {
       </Button>
     </form>
   );
+}
+
+/**
+ * Valores do formulário. `agora` é null na renderização do servidor
+ * (o relógio do aparelho só é conhecido no navegador).
+ */
+function valoresIniciais(inicial: MedicaoInicial | undefined, agora: Date | null): Entrada {
+  const dataBase = inicial ? new Date(inicial.medido_em) : agora;
+  return {
+    valor_mg_dl: inicial ? String(inicial.valor_mg_dl) : "",
+    data_hora: dataBase ? paraCampoDataHora(dataBase) : "",
+    momento: inicial?.momento ?? (agora ? sugerirMomento(agora) : "jejum"),
+    medicamento: inicial?.medicamento ?? "",
+    dose: inicial?.dose ?? "",
+    observacao: inicial?.observacao ?? "",
+  };
 }
 
 function Campo({

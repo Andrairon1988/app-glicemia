@@ -39,3 +39,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# o modelo de variáveis pode ir para o Git (sem valores reais)
+!.env.example

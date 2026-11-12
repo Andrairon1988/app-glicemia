@@ -26,10 +26,6 @@ function lerFiltros(sp: Awaited<SearchParams>): Filtros {
 const classeSelect =
   "h-12 w-full rounded-lg border border-input bg-background px-3 text-base outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 dark:bg-input/30";
 
-// Telas com dados do usuário logado: sempre carregadas na hora do acesso
-// (sem pré-carregamento), por isso ficam fora da validação de "navegação instantânea".
-export const instant = false;
-
 export default function HistoricoPage({ searchParams }: PageProps<"/medicoes">) {
   return (
     <>

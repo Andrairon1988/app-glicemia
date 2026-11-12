@@ -5,10 +5,6 @@ import { exigirCadastroCompleto } from "@/lib/dados";
 
 export const metadata: Metadata = { title: "Nova medição · Glicemia" };
 
-// Telas com dados do usuário logado: sempre carregadas na hora do acesso
-// (sem pré-carregamento), por isso ficam fora da validação de "navegação instantânea".
-export const instant = false;
-
 export default function NovaMedicaoPage() {
   return (
     <>

@@ -7,10 +7,6 @@ import { FormularioBoasVindas } from "./formulario";
 
 export const metadata: Metadata = { title: "Boas-vindas · Glicemia" };
 
-// Telas com dados do usuário logado: sempre carregadas na hora do acesso
-// (sem pré-carregamento), por isso ficam fora da validação de "navegação instantânea".
-export const instant = false;
-
 export default function BoasVindasPage() {
   return (
     <main className="mx-auto flex w-full max-w-md flex-1 flex-col gap-6 px-4 py-10">

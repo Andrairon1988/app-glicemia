@@ -71,8 +71,8 @@ export function MedicaoForm({ inicial }: { inicial?: MedicaoInicial }) {
     defaultValues: valoresIniciais(inicial, null),
   });
 
-  // O Next.js 16 não destrói a tela ao navegar: ele a esconde e a mostra de novo
-  // como estava. Para um formulário de registro isso não é desejado, então:
+  // Garante um formulário "novo" sempre que a tela aparece (inclusive se o
+  // Next.js preservar a tela entre navegações, como faz com Cache Components):
   //  - ao ficar visível: formulário limpo, com data/hora atuais do aparelho;
   //  - ao ficar escondido: some o alerta e a mensagem de erro.
   useLayoutEffect(() => {

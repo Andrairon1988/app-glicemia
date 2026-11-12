@@ -1,9 +1,10 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
-  cacheComponents: true,
-  partialPrefetching: true,
+  // Cache Components / Partial Prefetching desligados: todas as telas dependem do
+  // usuário logado e são montadas na hora do acesso. Com eles ligados, a validação
+  // do login pelo Supabase (que lê o relógio) gerava avisos de "Blocking Route".
+  cacheComponents: false,
   turbopack: {
     rules: {
       "*.css": {

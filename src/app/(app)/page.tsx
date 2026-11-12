@@ -12,10 +12,6 @@ import { rotuloMomento } from "@/lib/glicemia/momentos";
 import { medicoesDeHoje, ultimaMedicao } from "@/lib/medicoes";
 import { cn } from "@/lib/utils";
 
-// Telas com dados do usuário logado: sempre carregadas na hora do acesso
-// (sem pré-carregamento), por isso ficam fora da validação de "navegação instantânea".
-export const instant = false;
-
 export default function InicioPage() {
   return (
     <>

@@ -3,13 +3,14 @@
 import { Suspense } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { History, House, Plus } from "lucide-react";
+import { History, House, Plus, Settings } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const ITENS = [
   { href: "/", rotulo: "Início", Icone: House },
   { href: "/medicoes/nova", rotulo: "Nova", Icone: Plus },
   { href: "/medicoes", rotulo: "Histórico", Icone: History },
+  { href: "/configuracoes", rotulo: "Configurações", rotuloCurto: "Ajustes", Icone: Settings },
 ] as const;
 
 // O endereço atual só é conhecido na hora do acesso: enquanto isso,
@@ -70,8 +71,10 @@ function Inferior({ pathname }: { pathname: string | null }) {
       aria-label="Principal"
       className="fixed inset-x-0 bottom-0 z-40 border-t bg-background/95 pb-[env(safe-area-inset-bottom)] backdrop-blur md:hidden"
     >
-      <ul className="mx-auto grid max-w-md grid-cols-3">
-        {ITENS.map(({ href, rotulo, Icone }) => {
+      <ul className="mx-auto grid max-w-md grid-cols-4">
+        {ITENS.map((item) => {
+          const { href, Icone } = item;
+          const rotulo = "rotuloCurto" in item ? item.rotuloCurto : item.rotulo;
           const atual = pathname === href;
           const destaque = href === "/medicoes/nova";
           return (

@@ -1,7 +1,7 @@
 import { Suspense } from "react";
 import { Button } from "@/components/ui/button";
 import { sair } from "@/app/actions/auth";
-import { obterUsuario } from "@/lib/auth";
+import { exigirCadastroCompleto } from "@/lib/dados";
 
 export default function InicioPage() {
   return (
@@ -20,10 +20,11 @@ export default function InicioPage() {
 }
 
 async function Saudacao() {
-  const usuario = await obterUsuario();
+  const { usuario, perfil } = await exigirCadastroCompleto();
   return (
     <p className="text-lg">
-      Olá, <strong>{usuario.nome || usuario.email}</strong>! Login funcionando ✅
+      Olá! Acompanhando a glicemia de{" "}
+      <strong>{perfil.nome_paciente || usuario.nome}</strong>. Termos aceitos ✅
     </p>
   );
 }

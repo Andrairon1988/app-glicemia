@@ -1,9 +1,13 @@
 import "server-only";
 import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
+import { connection } from "next/server";
 
 /** Cliente Supabase para uso no servidor (Server Components, Actions, Route Handlers). */
 export async function criarClienteServidor() {
+  // Dados do usuário (sessão, saúde) são sempre lidos na hora do pedido:
+  // nunca pré-renderizados nem pré-carregados antecipadamente.
+  await connection();
   const cookieStore = await cookies();
 
   return createServerClient(

@@ -1,6 +1,6 @@
 # Projeto: App Web de Acompanhamento de Glicemia
 
-> Documento de premissas do projeto, construído por entrevista. Status: **premissas definidas** (12/11/2026). Ver pontos em aberto na seção 11.
+> Documento de premissas do projeto, construído por entrevista. Status: **Fase 1 (MVP) publicada** em https://app-glicemia-ten.vercel.app (12/11/2026). Código: https://github.com/Andrairon1988/app-glicemia. Andamento na seção 9.1 e pontos em aberto na seção 11.
 
 ## 1. Visão geral
 - **O que é:** aplicação web para registrar e acompanhar medições de glicemia (nível de açúcar no sangue).
@@ -137,6 +137,20 @@ Dados de saúde são **dados pessoais sensíveis** na LGPD (art. 11).
 | **Fase 2: Análise** | Gráfico de evolução (7/14/30/90 dias) e painel de resumo (média, mín., máx., % na meta, nº de hipo/hiperglicemias). |
 | **Fase 3: Compartilhamento e LGPD** | Relatório para o médico (PDF/CSV), link somente leitura para familiares (com revogação), exportação de todos os dados e exclusão definitiva da conta. |
 
+### 9.1 Andamento
+| Fase | Situação |
+|---|---|
+| Fase 1: MVP | ✅ Concluída e publicada em 12/11/2026 |
+| Fase 2: Análise | ⏳ Próxima |
+| Fase 3: Compartilhamento e LGPD | ⏳ Pendente |
+
+**Decisões tomadas durante a Fase 1:**
+- Horários exibidos sempre no fuso de Brasília (America/Sao_Paulo).
+- Medicamento: texto livre com lista de sugestões (insulinas e antidiabéticos orais comuns).
+- Faixas guardadas como 4 limites (padrão 54 / 70 / 180 / 250 mg/dL): abaixo de 54 é hipoglicemia grave; de 54 a 69, hipoglicemia; de 70 a 180, na meta; de 181 a 250, hiperglicemia; acima de 250, hiperglicemia grave.
+- Cache Components do Next.js 16 desligado: todas as telas dependem do usuário logado e são montadas na hora do acesso. Ligado, ele entrava em conflito com a validação do login feita pelo Supabase.
+- Código em `C:\dev\app-glicemia` (fora do OneDrive), versionado no GitHub e publicado automaticamente pela Vercel a cada envio.
+
 ### Fora do escopo (ideias futuras)
 - Lembretes / notificações de horário de medição.
 
@@ -165,6 +179,6 @@ Dados de saúde são **dados pessoais sensíveis** na LGPD (art. 11).
 
 ## 11. Pontos em aberto
 - [x] Escolher a stack de tecnologia: Next.js + Supabase (seção 8).
-- [ ] Definir a lista padrão de medicamentos/insulinas sugeridos no formulário (ou deixar texto livre).
+- [x] Medicamentos: texto livre com lista de sugestões (Fase 1).
 - [ ] Definir se o link de compartilhamento terá validade padrão (ex.: 30 dias) ou será permanente até a revogação.
-- [ ] Redigir os textos dos Termos de Uso e da Política de Privacidade.
+- [x] Termos de Uso e Política de Privacidade: texto-modelo publicado em `/termos` (revisar antes de qualquer uso real).

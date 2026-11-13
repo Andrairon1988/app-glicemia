@@ -65,8 +65,10 @@
 ### 5.6 Compartilhamento com familiares
 - O paciente gera um **link somente de leitura** e o familiar acessa sem precisar criar conta.
 - O link usa um token longo e aleatório, impossível de adivinhar.
-- O paciente pode **revogar** o link (ou gerar outro) a qualquer momento. Opcionalmente, o link tem data de validade.
-- Quem acessa pelo link vê histórico, gráfico e resumo, mas não edita nada.
+- O paciente pode **revogar** o link (ou gerar outro) a qualquer momento.
+- **Validade:** escolhida ao criar o link, com padrão de **30 dias** (opções: 7, 30, 90 dias ou sem validade).
+- Pode haver **vários links ao mesmo tempo**, um por pessoa, cada um com nome (ex.: "Mãe", "Dra. Ana"), desativável individualmente.
+- Quem acessa pelo link vê resumo, gráfico e medições (valores, momentos e medicamentos), **sem as observações**, e não edita nada.
 
 ## 6. Contas e acesso
 - **Autenticação:** somente **login com Google** (OAuth). O app não guarda senhas.
@@ -180,5 +182,5 @@ Dados de saúde são **dados pessoais sensíveis** na LGPD (art. 11).
 ## 11. Pontos em aberto
 - [x] Escolher a stack de tecnologia: Next.js + Supabase (seção 8).
 - [x] Medicamentos: texto livre com lista de sugestões (Fase 1).
-- [ ] Definir se o link de compartilhamento terá validade padrão (ex.: 30 dias) ou será permanente até a revogação.
+- [x] Validade do link de compartilhamento: escolhida ao criar, com padrão de 30 dias (7, 30, 90 dias ou sem validade); pode ser desativado a qualquer momento.
 - [x] Termos de Uso e Política de Privacidade: texto-modelo publicado em `/termos` (revisar antes de qualquer uso real).

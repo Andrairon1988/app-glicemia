@@ -3,13 +3,14 @@
 import { Suspense } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { History, House, Plus, Settings } from "lucide-react";
+import { ChartLine, History, House, Plus, Settings } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const ITENS = [
   { href: "/", rotulo: "Início", Icone: House },
   { href: "/medicoes/nova", rotulo: "Nova", Icone: Plus },
   { href: "/medicoes", rotulo: "Histórico", Icone: History },
+  { href: "/resumo", rotulo: "Resumo", Icone: ChartLine },
   { href: "/configuracoes", rotulo: "Configurações", rotuloCurto: "Ajustes", Icone: Settings },
 ] as const;
 
@@ -50,13 +51,15 @@ function Topo({ pathname }: { pathname: string | null }) {
             key={href}
             href={href}
             aria-current={atual ? "page" : undefined}
+            title={rotulo}
             className={cn(
-              "flex h-11 items-center gap-2 rounded-lg px-3 text-base font-medium outline-none hover:bg-muted focus-visible:ring-3 focus-visible:ring-ring/50",
+              "flex h-11 min-w-11 items-center justify-center gap-2 rounded-lg px-3 text-base font-medium outline-none hover:bg-muted focus-visible:ring-3 focus-visible:ring-ring/50",
               atual && "bg-muted",
             )}
           >
             <Icone aria-hidden="true" className="size-5" />
-            {rotulo}
+            {/* Em telas médias só o ícone aparece; o nome continua disponível ao leitor de tela. */}
+            <span className="sr-only lg:not-sr-only">{rotulo}</span>
           </Link>
         );
       })}
@@ -71,7 +74,7 @@ function Inferior({ pathname }: { pathname: string | null }) {
       aria-label="Principal"
       className="fixed inset-x-0 bottom-0 z-40 border-t bg-background/95 pb-[env(safe-area-inset-bottom)] backdrop-blur md:hidden"
     >
-      <ul className="mx-auto grid max-w-md grid-cols-4">
+      <ul className="mx-auto grid max-w-lg grid-cols-5">
         {ITENS.map((item) => {
           const { href, Icone } = item;
           const rotulo = "rotuloCurto" in item ? item.rotuloCurto : item.rotulo;

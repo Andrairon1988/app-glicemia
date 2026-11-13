@@ -141,7 +141,7 @@ Dados de saúde são **dados pessoais sensíveis** na LGPD (art. 11).
 | Fase | Situação |
 |---|---|
 | Fase 1: MVP | ✅ Concluída e publicada em 12/11/2026 |
-| Fase 2: Análise | ⏳ Próxima |
+| Fase 2: Análise | 🧪 Implementada em 13/11/2026: aba "Resumo" com % na meta, distribuição por faixa, indicadores (média, mín., máx., nº de medições, hipo/hiper), gráfico de evolução e média por momento. Aguardando validação. |
 | Fase 3: Compartilhamento e LGPD | ⏳ Pendente |
 
 **Decisões tomadas durante a Fase 1:**

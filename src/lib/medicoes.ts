@@ -77,6 +77,25 @@ export async function medicoesDeHoje() {
   return (data ?? []) as Medicao[];
 }
 
+/**
+ * Todas as medições dos últimos `dias` dias (contando hoje), em ordem cronológica,
+ * para o gráfico e os indicadores do Resumo.
+ */
+export async function medicoesDoPeriodo(dias: number) {
+  const usuario = await obterUsuario();
+  const supabase = await criarClienteServidor();
+  const desde = somarDias(chaveDia(new Date()), -(dias - 1));
+  const { data, error } = await supabase
+    .from("medicoes")
+    .select(COLUNAS)
+    .eq("user_id", usuario.id)
+    .gte("medido_em", inicioDoDia(desde))
+    .order("medido_em", { ascending: true })
+    .limit(5000);
+  if (error) throw new Error("Não foi possível carregar as medições.");
+  return { medicoes: (data ?? []) as Medicao[], desde };
+}
+
 export async function ultimaMedicao() {
   const usuario = await obterUsuario();
   const supabase = await criarClienteServidor();

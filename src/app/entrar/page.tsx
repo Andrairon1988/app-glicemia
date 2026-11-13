@@ -32,7 +32,14 @@ async function MensagemErro({
 }: {
   searchParams: PageProps<"/entrar">["searchParams"];
 }) {
-  const { erro } = await searchParams;
+  const { erro, conta_excluida } = await searchParams;
+  if (conta_excluida) {
+    return (
+      <p role="status" className="rounded-lg border p-3 text-center text-base">
+        Sua conta e todos os seus dados foram excluídos.
+      </p>
+    );
+  }
   if (!erro) return null;
   return (
     <p role="alert" className="text-center text-sm font-medium text-destructive">

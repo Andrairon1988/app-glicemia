@@ -2,7 +2,7 @@ import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 
 /** Rotas acessíveis sem login. */
-const ROTAS_PUBLICAS = ["/entrar", "/auth", "/termos"];
+const ROTAS_PUBLICAS = ["/entrar", "/auth", "/termos", "/compartilhado"];
 
 /**
  * Renova a sessão do Supabase a cada requisição e redireciona

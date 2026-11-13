@@ -42,9 +42,9 @@ export function GraficoEvolucao({
 
   return (
     // currentColor = cor "apagada" do texto: eixos, grade e linha ficam discretos.
-    <div className="h-72 w-full text-muted-foreground sm:h-80">
+    <div className="grafico-evolucao h-[300px] w-full text-muted-foreground">
       <ResponsiveContainer width="100%" height="100%">
-        <LineChart data={pontos} margin={{ top: 8, right: 8, bottom: 0, left: -16 }}>
+        <LineChart data={pontos} margin={{ top: 8, right: 20, bottom: 0, left: -16 }}>
           <CartesianGrid vertical={false} stroke="currentColor" strokeOpacity={0.15} />
 
           {/* Faixa da meta sombreada em verde */}

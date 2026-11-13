@@ -96,6 +96,20 @@ export async function medicoesDoPeriodo(dias: number) {
   return { medicoes: (data ?? []) as Medicao[], desde };
 }
 
+/** Todas as medições do usuário (exportação de dados / LGPD), em ordem cronológica. */
+export async function todasMedicoes() {
+  const usuario = await obterUsuario();
+  const supabase = await criarClienteServidor();
+  const { data, error } = await supabase
+    .from("medicoes")
+    .select(`${COLUNAS}, criado_em, atualizado_em`)
+    .eq("user_id", usuario.id)
+    .order("medido_em", { ascending: true })
+    .limit(100000);
+  if (error) throw new Error("Não foi possível carregar as medições.");
+  return (data ?? []) as (Medicao & { criado_em: string; atualizado_em: string })[];
+}
+
 export async function ultimaMedicao() {
   const usuario = await obterUsuario();
   const supabase = await criarClienteServidor();

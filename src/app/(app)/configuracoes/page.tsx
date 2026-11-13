@@ -1,7 +1,11 @@
 import { Suspense } from "react";
 import type { Metadata } from "next";
 import Link from "next/link";
+import { Download, FileText, Share2, Sheet } from "lucide-react";
+import { buttonVariants } from "@/components/ui/button";
 import { exigirCadastroCompleto, obterFaixas } from "@/lib/dados";
+import { cn } from "@/lib/utils";
+import { ExcluirConta } from "./excluir-conta";
 import { FormularioFaixas } from "./formulario-faixas";
 import { FormularioNome } from "./formulario-nome";
 import { SeletorTema } from "./seletor-tema";
@@ -22,6 +26,7 @@ export default function ConfiguracoesPage() {
 async function Conteudo() {
   const { usuario, perfil } = await exigirCadastroCompleto();
   const faixas = await obterFaixas();
+  const botao = cn(buttonVariants({ variant: "outline", size: "lg" }), "h-12 flex-1 text-base");
 
   return (
     <>
@@ -43,14 +48,42 @@ async function Conteudo() {
         <SeletorTema />
       </Secao>
 
-      <Secao titulo="Privacidade">
+      <Secao titulo="Compartilhamento e relatórios">
+        <div className="flex flex-col gap-3 sm:flex-row">
+          <Link href="/compartilhar" className={botao}>
+            <Share2 aria-hidden="true" className="size-5" />
+            Links para familiares
+          </Link>
+          <Link href="/relatorio" className={botao}>
+            <FileText aria-hidden="true" className="size-5" />
+            Relatório para o médico
+          </Link>
+        </div>
+      </Secao>
+
+      <Secao titulo="Privacidade e seus dados">
         <p className="text-base">
           Leia os{" "}
           <Link href="/termos" className="font-medium underline underline-offset-4">
             Termos de Uso e a Política de Privacidade
           </Link>
-          . A exportação de dados e a exclusão da conta chegam na próxima fase do projeto.
+          . Pela LGPD, você pode baixar uma cópia de todos os seus dados e excluir sua conta a
+          qualquer momento.
         </p>
+        <div className="flex flex-col gap-3 sm:flex-row">
+          <a href="/exportar/tudo" className={botao}>
+            <Download aria-hidden="true" className="size-5" />
+            Baixar todos os meus dados
+          </a>
+          <a href="/exportar/medicoes?dias=tudo" className={botao}>
+            <Sheet aria-hidden="true" className="size-5" />
+            Baixar medições (planilha)
+          </a>
+        </div>
+        <div className="flex flex-col gap-2 border-t pt-4">
+          <p className="text-base font-medium">Zona de perigo</p>
+          <ExcluirConta />
+        </div>
       </Secao>
     </>
   );

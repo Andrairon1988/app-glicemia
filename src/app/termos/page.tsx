@@ -10,7 +10,7 @@ export default function TermosPage() {
       <article className="space-y-6 text-base leading-relaxed [&_h2]:mt-8 [&_h2]:text-xl [&_h2]:font-semibold [&_ul]:list-disc [&_ul]:space-y-1 [&_ul]:pl-6">
         <header className="space-y-2">
           <h1 className="text-3xl font-bold">Termos de Uso e Política de Privacidade</h1>
-          <p className="text-sm text-muted-foreground">Última atualização: 12/11/2026</p>
+          <p className="text-sm text-muted-foreground">Última atualização: 13/11/2026</p>
         </header>
 
         <p className="rounded-lg border border-amber-500/50 bg-amber-50 p-4 text-amber-950 dark:bg-amber-950/40 dark:text-amber-100">
@@ -40,7 +40,9 @@ export default function TermosPage() {
         <ul>
           <li>Os dados são usados apenas para exibir seu histórico, gráficos e relatórios dentro do aplicativo.</li>
           <li>Não vendemos, não compartilhamos com terceiros e não usamos seus dados para publicidade.</li>
-          <li>Somente você acessa seus dados. Em versões futuras, você poderá gerar um link de leitura para familiares, que pode ser revogado a qualquer momento.</li>
+          <li>Somente você acessa seus dados, exceto quando <strong>você mesmo</strong> cria um link de compartilhamento.</li>
+          <li>Links de compartilhamento são somente leitura e mostram resumo, gráfico, valores, momentos e medicamentos, <strong>nunca as observações</strong>. Qualquer pessoa com o endereço do link vê esses dados enquanto ele estiver ativo. Você escolhe a validade e pode desativá-lo a qualquer momento.</li>
+          <li>Relatórios e planilhas que você baixa ficam sob sua responsabilidade após o download.</li>
         </ul>
 
         <h2>4. Armazenamento e segurança</h2>
@@ -54,7 +56,8 @@ export default function TermosPage() {
         <h2>5. Seus direitos</h2>
         <ul>
           <li>Acessar, corrigir e excluir suas medições a qualquer momento.</li>
-          <li>Exportar todos os seus dados e excluir sua conta definitivamente (funcionalidade prevista para a próxima fase do projeto).</li>
+          <li>Exportar todos os seus dados (Configurações → Baixar todos os meus dados).</li>
+          <li>Excluir sua conta definitivamente, com todas as medições, configurações e links (Configurações → Excluir minha conta).</li>
           <li>Revogar o consentimento, o que implica a exclusão da conta e dos dados.</li>
         </ul>
 

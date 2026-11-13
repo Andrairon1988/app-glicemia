@@ -2,7 +2,7 @@ import Link from "next/link";
 import { ChevronRight, Pill } from "lucide-react";
 import { BadgeFaixa } from "@/components/badge-faixa";
 import { formatarHora } from "@/lib/datas";
-import { classificar, type Faixas } from "@/lib/glicemia/classificar";
+import { classificar, INFO_CLASSE, type Faixas } from "@/lib/glicemia/classificar";
 import { rotuloMomento } from "@/lib/glicemia/momentos";
 import type { Medicao } from "@/lib/medicoes";
 
@@ -16,7 +16,16 @@ export function ItemMedicao({ medicao, faixas }: { medicao: Medicao; faixas: Fai
       <Link
         href={`/medicoes/${medicao.id}/editar`}
         className="flex min-h-16 items-center gap-3 rounded-lg px-3 py-3 outline-none hover:bg-muted focus-visible:ring-3 focus-visible:ring-ring/50"
-        aria-label={`${medicao.valor_mg_dl} mg/dL às ${hora}, ${rotuloMomento(medicao.momento)}. Editar`}
+        aria-label={[
+          `${medicao.valor_mg_dl} mg/dL às ${hora}`,
+          INFO_CLASSE[classe].rotulo,
+          rotuloMomento(medicao.momento),
+          [medicao.medicamento, medicao.dose].filter(Boolean).join(" "),
+          medicao.observacao,
+          "Editar",
+        ]
+          .filter(Boolean)
+          .join(". ")}
       >
         <time dateTime={medicao.medido_em} className="w-12 shrink-0 text-base tabular-nums text-muted-foreground">
           {hora}

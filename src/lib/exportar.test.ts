@@ -30,6 +30,28 @@ describe("gerarCsvMedicoes", () => {
     expect(linhas[2]).toBe("12/11/2026;13:00;Depois do almoço;120;Na meta;;;");
   });
 
+  it("neutraliza texto que o Excel leria como fórmula", () => {
+    const perigoso = gerarCsvMedicoes(
+      [
+        {
+          valor_mg_dl: 100,
+          medido_em: "2026-11-12T10:30:00Z",
+          momento: "jejum",
+          medicamento: '=HYPERLINK("http://mal.example","ver")',
+          dose: "+2 UI",
+          observacao: "@SOMA(1;2)",
+        },
+      ],
+      FAIXAS_PADRAO,
+    );
+    const linha = perigoso.split("\r\n")[1];
+    expect(linha).toContain(`"'=HYPERLINK(""http://mal.example"",""ver"")"`);
+    expect(linha).toContain(";'+2 UI;");
+    expect(linha).toContain(`"'@SOMA(1;2)"`);
+    // números (a glicemia) continuam números
+    expect(linha).toContain(";100;");
+  });
+
   it("protege campos com ponto e vírgula, aspas e quebra de linha", () => {
     expect(csv).toContain('"Tontura; ""forte""\nmediu de novo"');
   });

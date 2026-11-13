@@ -9,6 +9,17 @@ const nextConfig: NextConfig = {
   // repassar o endereço (que contém o código de acesso) para outros sites.
   async headers() {
     return [
+      // Todas as páginas: o app não pode ser exibido dentro de outro site (clickjacking)
+      // e o navegador não deve "adivinhar" o tipo dos arquivos.
+      {
+        source: "/:path*",
+        headers: [
+          { key: "X-Frame-Options", value: "DENY" },
+          { key: "Content-Security-Policy", value: "frame-ancestors 'none'" },
+          { key: "X-Content-Type-Options", value: "nosniff" },
+          { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
+        ],
+      },
       {
         source: "/compartilhado/:path*",
         headers: [

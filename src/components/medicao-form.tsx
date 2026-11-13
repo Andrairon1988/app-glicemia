@@ -12,14 +12,20 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { paraCampoDataHora } from "@/lib/datas";
+import { campoParaISO, paraCampoDataHora } from "@/lib/datas";
 import { INFO_CLASSE, type Classe } from "@/lib/glicemia/classificar";
 import { MOMENTOS, sugerirMomento } from "@/lib/glicemia/momentos";
 import { medicaoSchema } from "@/lib/validacao";
 
 const formSchema = z.object({
   valor_mg_dl: medicaoSchema.shape.valor_mg_dl,
-  data_hora: z.string().min(1, "Informe data e hora."),
+  // O campo é preenchido e lido sempre no horário de Brasília (ver lib/datas.ts).
+  data_hora: z
+    .string()
+    .min(1, "Informe data e hora.")
+    .refine((v) => Date.parse(campoParaISO(v)) <= Date.now() + 5 * 60 * 1000, {
+      error: "A data e a hora não podem estar no futuro.",
+    }),
   momento: medicaoSchema.shape.momento,
   medicamento: z.string().trim().max(100, "Use no máximo 100 caracteres."),
   dose: z.string().trim().max(50, "Use no máximo 50 caracteres."),
@@ -71,23 +77,20 @@ export function MedicaoForm({ inicial }: { inicial?: MedicaoInicial }) {
     defaultValues: valoresIniciais(inicial, null),
   });
 
-  // Garante um formulário "novo" sempre que a tela aparece (inclusive se o
-  // Next.js preservar a tela entre navegações, como faz com Cache Components):
-  //  - ao ficar visível: formulário limpo, com data/hora atuais do aparelho;
-  //  - ao ficar escondido: some o alerta e a mensagem de erro.
+  // Preenche data/hora e momento UMA vez, ao abrir a tela (o relógio só é
+  // conhecido no navegador). Não pode reagir a mudanças de `inicial`: depois de
+  // salvar uma edição a página recarrega os dados, e reiniciar o formulário
+  // apagaria o alerta de valor grave que acabou de ser mostrado.
   useLayoutEffect(() => {
     reset(valoresIniciais(inicial, new Date()));
-    return () => {
-      setAlerta(null);
-      setMensagem(null);
-    };
-  }, [inicial, reset]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- intencional: só na abertura
+  }, []);
 
   async function enviar(dados: Saida) {
     setMensagem(null);
     const entrada = {
       valor_mg_dl: dados.valor_mg_dl,
-      medido_em: new Date(dados.data_hora).toISOString(),
+      medido_em: campoParaISO(dados.data_hora),
       momento: dados.momento,
       medicamento: dados.medicamento,
       dose: dados.dose,
@@ -147,7 +150,7 @@ export function MedicaoForm({ inicial }: { inicial?: MedicaoInicial }) {
       </Campo>
 
       <div className="grid gap-5 sm:grid-cols-2">
-        <Campo id="data_hora" rotulo="Data e hora" erro={errors.data_hora?.message}>
+        <Campo id="data_hora" rotulo="Data e hora (horário de Brasília)" erro={errors.data_hora?.message}>
           <input
             id="data_hora"
             type="datetime-local"

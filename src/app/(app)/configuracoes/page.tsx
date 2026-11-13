@@ -2,6 +2,7 @@ import { Suspense } from "react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Download, FileText, Share2, Sheet } from "lucide-react";
+import { Secao } from "@/components/secao";
 import { buttonVariants } from "@/components/ui/button";
 import { exigirCadastroCompleto, obterFaixas } from "@/lib/dados";
 import { cn } from "@/lib/utils";
@@ -31,7 +32,7 @@ async function Conteudo() {
   return (
     <>
       <Secao titulo="Paciente">
-        <FormularioNome nome={perfil.nome_paciente ?? usuario.nome} />
+        <FormularioNome nome={perfil.nome_paciente || usuario.nome} />
         <p className="text-sm text-muted-foreground">Conta Google: {usuario.email}</p>
       </Secao>
 
@@ -86,17 +87,5 @@ async function Conteudo() {
         </div>
       </Secao>
     </>
-  );
-}
-
-function Secao({ titulo, children }: { titulo: string; children: React.ReactNode }) {
-  const id = `secao-${titulo.toLowerCase().replace(/\W+/g, "-")}`;
-  return (
-    <section aria-labelledby={id} className="flex flex-col gap-4 rounded-xl border p-5">
-      <h2 id={id} className="text-xl font-semibold">
-        {titulo}
-      </h2>
-      {children}
-    </section>
   );
 }

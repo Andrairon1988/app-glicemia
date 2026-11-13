@@ -36,5 +36,5 @@ async function Conteudo() {
   if (perfil.termos_aceitos_em) {
     redirect("/");
   }
-  return <FormularioBoasVindas nomeInicial={perfil.nome_paciente ?? usuario.nome} />;
+  return <FormularioBoasVindas nomeInicial={perfil.nome_paciente || usuario.nome} />;
 }

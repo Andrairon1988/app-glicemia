@@ -12,6 +12,8 @@ export type EstadoLink = {
   ok?: boolean;
   mensagem?: string;
   erros?: Record<string, string[] | undefined>;
+  /** Valores digitados, para não se perderem quando houver erro. */
+  valores?: { nome: string; validade: string };
 };
 
 const novoLinkSchema = z.object({
@@ -23,12 +25,13 @@ const novoLinkSchema = z.object({
 
 export async function criarLink(_estado: EstadoLink, formData: FormData): Promise<EstadoLink> {
   const usuario = await obterUsuario();
-  const resultado = novoLinkSchema.safeParse({
-    nome: formData.get("nome"),
-    validade: formData.get("validade"),
-  });
+  const valores = {
+    nome: String(formData.get("nome") ?? ""),
+    validade: String(formData.get("validade") ?? "30"),
+  };
+  const resultado = novoLinkSchema.safeParse(valores);
   if (!resultado.success) {
-    return { erros: resultado.error.flatten().fieldErrors };
+    return { erros: z.flattenError(resultado.error).fieldErrors, valores };
   }
 
   const supabase = await criarClienteServidor();
@@ -40,7 +43,7 @@ export async function criarLink(_estado: EstadoLink, formData: FormData): Promis
     expira_em: calcularExpiracao(resultado.data.validade),
   });
   if (error) {
-    return { mensagem: "Não foi possível criar o link. Tente novamente." };
+    return { mensagem: "Não foi possível criar o link. Tente novamente.", valores };
   }
 
   revalidatePath("/compartilhar");
@@ -76,9 +79,11 @@ export async function excluirLink(id: string): Promise<{ ok: boolean }> {
 }
 
 /** LGPD: exclui a conta do usuário logado e todos os seus dados. */
-export async function excluirConta(confirmacao: string): Promise<{ ok: false; mensagem: string }> {
+export async function excluirConta(confirmacao: unknown): Promise<{ ok: false; mensagem: string }> {
   await obterUsuario();
-  if (confirmacao.trim().toUpperCase() !== "EXCLUIR") {
+  // Server Actions podem ser chamadas com qualquer valor: valida o tipo antes de usar.
+  const texto = z.string().safeParse(confirmacao);
+  if (!texto.success || texto.data.trim().toUpperCase() !== "EXCLUIR") {
     return { ok: false, mensagem: 'Digite EXCLUIR para confirmar.' };
   }
   const supabase = await criarClienteServidor();

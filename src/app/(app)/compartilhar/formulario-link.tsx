@@ -21,8 +21,10 @@ export function FormularioLink() {
             Para quem é o link?
           </Label>
           <Input
+            key={estado.valores?.nome ?? ""}
             id="nome"
             name="nome"
+            defaultValue={estado.valores?.nome ?? ""}
             placeholder="Ex.: Mãe, Dra. Ana"
             maxLength={60}
             className="h-12 text-base"
@@ -39,7 +41,13 @@ export function FormularioLink() {
           <Label htmlFor="validade" className="text-base">
             Validade
           </Label>
-          <select id="validade" name="validade" defaultValue="30" className={classeSelect}>
+          <select
+            key={estado.valores?.validade ?? "30"}
+            id="validade"
+            name="validade"
+            defaultValue={estado.valores?.validade ?? "30"}
+            className={classeSelect}
+          >
             {VALIDADES.map((v) => (
               <option key={v.valor} value={v.valor}>
                 {v.rotulo}

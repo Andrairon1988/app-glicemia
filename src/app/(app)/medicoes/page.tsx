@@ -1,12 +1,13 @@
 import { Suspense } from "react";
 import type { Metadata } from "next";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import { ItemMedicao } from "@/components/item-medicao";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { exigirCadastroCompleto, obterFaixas } from "@/lib/dados";
-import { chaveDia, rotuloDia } from "@/lib/datas";
+import { agruparPorDia, rotuloDia } from "@/lib/datas";
 import { MOMENTOS, VALORES_MOMENTO, type Momento } from "@/lib/glicemia/momentos";
-import { listarMedicoes, PERIODOS, POR_PAGINA, type Filtros, type Medicao } from "@/lib/medicoes";
+import { listarMedicoes, PERIODOS, POR_PAGINA, type Filtros } from "@/lib/medicoes";
 import { cn } from "@/lib/utils";
 
 export const metadata: Metadata = { title: "Histórico · Glicemia" };
@@ -40,10 +41,16 @@ export default function HistoricoPage({ searchParams }: PageProps<"/medicoes">) 
 async function Conteudo({ searchParams }: { searchParams: SearchParams }) {
   await exigirCadastroCompleto();
   const filtros = lerFiltros(await searchParams);
-  const [faixas, { medicoes, total }] = await Promise.all([
+  const [faixas, { medicoes, total, alemDoFim }] = await Promise.all([
     obterFaixas(),
     listarMedicoes(filtros),
   ]);
+  if (alemDoFim) {
+    // Página que não existe mais: volta para a primeira, mantendo os filtros.
+    const params = new URLSearchParams({ periodo: filtros.periodo });
+    if (filtros.momento) params.set("momento", filtros.momento);
+    redirect(`/medicoes?${params}`);
+  }
   const totalPaginas = Math.max(1, Math.ceil(total / POR_PAGINA));
 
   return (
@@ -121,15 +128,6 @@ async function Conteudo({ searchParams }: { searchParams: SearchParams }) {
       )}
     </>
   );
-}
-
-function agruparPorDia(medicoes: Medicao[]): [string, Medicao[]][] {
-  const grupos = new Map<string, Medicao[]>();
-  for (const m of medicoes) {
-    const dia = chaveDia(m.medido_em);
-    grupos.set(dia, [...(grupos.get(dia) ?? []), m]);
-  }
-  return [...grupos.entries()];
 }
 
 function LinkPagina({

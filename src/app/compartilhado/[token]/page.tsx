@@ -2,8 +2,9 @@ import { Suspense } from "react";
 import type { Metadata } from "next";
 import { Eye } from "lucide-react";
 import { BadgeFaixa } from "@/components/badge-faixa";
-import { PainelResumo, Secao, SeletorPeriodo } from "@/components/resumo/painel-resumo";
-import { chaveDia, formatarDataHora, formatarHora, rotuloDia, somarDias } from "@/lib/datas";
+import { PainelResumo, SeletorPeriodo } from "@/components/resumo/painel-resumo";
+import { Secao } from "@/components/secao";
+import { agruparPorDia, chaveDia, formatarDataHora, formatarHora, rotuloDia, somarDias } from "@/lib/datas";
 import { classificar, FAIXAS_PADRAO, type Faixas } from "@/lib/glicemia/classificar";
 import { rotuloMomento, type Momento } from "@/lib/glicemia/momentos";
 import { lerDias } from "@/lib/periodos";
@@ -57,8 +58,19 @@ async function Conteudo({
   // A função do banco só devolve dados se o link existir, não tiver expirado
   // e não tiver sido desativado. As observações nunca são incluídas.
   const supabase = await criarClienteServidor();
-  const { data } = await supabase.rpc("dados_compartilhados", { p_token: token, p_dias: dias });
+  const { data, error } = await supabase.rpc("dados_compartilhados", { p_token: token, p_dias: dias });
   const dados = data as DadosCompartilhados | null;
+
+  if (error) {
+    return (
+      <section role="alert" className="flex flex-1 flex-col items-center justify-center gap-3 py-10 text-center">
+        <h1 className="text-2xl font-bold">Não foi possível carregar</h1>
+        <p className="max-w-md text-base text-muted-foreground">
+          Houve uma falha de conexão. Verifique a internet e tente novamente em instantes.
+        </p>
+      </section>
+    );
+  }
 
   if (!dados) {
     return (
@@ -96,7 +108,7 @@ async function Conteudo({
 
       {dados.medicoes.length > 0 && (
         <Secao titulo="Medições">
-          {agruparPorDia(dados.medicoes).map(([dia, doDia]) => (
+          {agruparPorDia([...dados.medicoes].reverse()).map(([dia, doDia]) => (
             <div key={dia} className="flex flex-col gap-1">
               <h3 className="text-base font-semibold">{rotuloDia(dia)}</h3>
               <ul className="divide-y rounded-xl border">
@@ -122,13 +134,4 @@ async function Conteudo({
       <p className="text-sm text-muted-foreground">{AVISO_MEDICO}</p>
     </>
   );
-}
-
-function agruparPorDia(medicoes: MedicaoCompartilhada[]): [string, MedicaoCompartilhada[]][] {
-  const grupos = new Map<string, MedicaoCompartilhada[]>();
-  for (const m of [...medicoes].reverse()) {
-    const dia = chaveDia(m.medido_em);
-    grupos.set(dia, [...(grupos.get(dia) ?? []), m]);
-  }
-  return [...grupos.entries()];
 }

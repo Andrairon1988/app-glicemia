@@ -10,6 +10,14 @@ describe("percentuaisInteiros", () => {
   it("sem medições, tudo zero", () => {
     expect(percentuaisInteiros([0, 0])).toEqual([0, 0]);
   });
+  it("faixa com ao menos 1 medição nunca aparece como 0% (nem a meta como 100%)", () => {
+    // 1 hipo grave entre 250 medições: 0,4% arredondaria para 0% e a meta para 100%
+    expect(percentuaisInteiros([1, 0, 249, 0, 0])).toEqual([1, 0, 99, 0, 0]);
+    expect(percentuaisInteiros([1, 1, 997, 1, 0])).toEqual([1, 1, 97, 1, 0]);
+  });
+  it("100% só quando todas as medições estão na mesma faixa", () => {
+    expect(percentuaisInteiros([0, 0, 40, 0, 0])).toEqual([0, 0, 100, 0, 0]);
+  });
 });
 
 describe("calcularResumo", () => {

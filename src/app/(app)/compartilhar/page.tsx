@@ -1,7 +1,7 @@
 import { Suspense } from "react";
 import type { Metadata } from "next";
 import { Eye, EyeOff } from "lucide-react";
-import { Secao } from "@/components/resumo/painel-resumo";
+import { Secao } from "@/components/secao";
 import { obterUsuario } from "@/lib/auth";
 import { exigirCadastroCompleto } from "@/lib/dados";
 import { formatarDataHora } from "@/lib/datas";

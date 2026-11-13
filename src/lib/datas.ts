@@ -70,8 +70,44 @@ export function rotuloDia(chave: string, agora: Date = new Date()): string {
   return texto.charAt(0).toUpperCase() + texto.slice(1);
 }
 
-/** Converte uma data para o formato do campo <input type="datetime-local"> (horário local do navegador). */
+const fmtCampo = new Intl.DateTimeFormat("en-CA", {
+  timeZone: FUSO,
+  year: "numeric",
+  month: "2-digit",
+  day: "2-digit",
+  hour: "2-digit",
+  minute: "2-digit",
+  hourCycle: "h23",
+});
+
+/**
+ * Converte uma data para o campo <input type="datetime-local">, SEMPRE no
+ * horário de Brasília (o mesmo usado em todas as telas), independentemente
+ * do fuso do aparelho — assim quem está em Manaus, no Acre ou viajando vê
+ * no formulário a mesma hora que aparece na lista.
+ */
 export function paraCampoDataHora(data: Date): string {
-  const p = (n: number) => String(n).padStart(2, "0");
-  return `${data.getFullYear()}-${p(data.getMonth() + 1)}-${p(data.getDate())}T${p(data.getHours())}:${p(data.getMinutes())}`;
+  const p = Object.fromEntries(fmtCampo.formatToParts(data).map((x) => [x.type, x.value]));
+  return `${p.year}-${p.month}-${p.day}T${p.hour}:${p.minute}`;
+}
+
+/** Converte o valor do campo datetime-local (horário de Brasília) para ISO/UTC. */
+export function campoParaISO(valor: string): string {
+  return new Date(`${valor}:00${OFFSET}`).toISOString();
+}
+
+/** Hora e minuto em Brasília (para sugerir o momento da medição). */
+export function horaMinutoBrasilia(data: Date): { hora: number; minuto: number } {
+  const [hora, minuto] = paraCampoDataHora(data).slice(11).split(":").map(Number);
+  return { hora, minuto };
+}
+
+/** Agrupa itens com data (medido_em) por dia de Brasília, mantendo a ordem recebida. */
+export function agruparPorDia<T extends { medido_em: string }>(itens: T[]): [string, T[]][] {
+  const grupos = new Map<string, T[]>();
+  for (const item of itens) {
+    const dia = chaveDia(item.medido_em);
+    grupos.set(dia, [...(grupos.get(dia) ?? []), item]);
+  }
+  return [...grupos.entries()];
 }

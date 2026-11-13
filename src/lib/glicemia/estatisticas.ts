@@ -34,6 +34,15 @@ export function percentuaisInteiros(quantidades: number[]): number[] {
     inteiros[i]++;
     falta--;
   }
+  // Em saúde, "0%" de hipoglicemia grave quando houve uma é enganoso: toda faixa
+  // com ao menos 1 medição recebe no mínimo 1%, tirado da faixa com maior percentual.
+  quantidades.forEach((q, i) => {
+    if (q > 0 && inteiros[i] === 0) {
+      const maior = inteiros.indexOf(Math.max(...inteiros));
+      inteiros[maior]--;
+      inteiros[i] = 1;
+    }
+  });
   return inteiros;
 }
 

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { BadgeFaixa } from "@/components/badge-faixa";
 import { BarraFaixas } from "@/components/resumo/barra-faixas";
+import { Secao } from "@/components/secao";
 import { GraficoEvolucao, type PontoGrafico } from "@/components/resumo/grafico-evolucao";
 import { formatarDataHora, inicioDoDia, somarDias } from "@/lib/datas";
 import { classificar, type Faixas } from "@/lib/glicemia/classificar";
@@ -143,21 +144,6 @@ export function PainelResumo({
         </table>
       </Secao>
     </>
-  );
-}
-
-export function Secao({ titulo, children }: { titulo: string; children: React.ReactNode }) {
-  const id = `secao-${titulo.toLowerCase().replace(/\W+/g, "-")}`;
-  return (
-    <section
-      aria-labelledby={id}
-      className="flex flex-col gap-4 rounded-xl border p-5 print:break-inside-avoid print:gap-2 print:p-3"
-    >
-      <h2 id={id} className="text-xl font-semibold print:text-base">
-        {titulo}
-      </h2>
-      {children}
-    </section>
   );
 }
 

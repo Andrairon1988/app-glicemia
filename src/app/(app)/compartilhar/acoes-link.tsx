@@ -147,8 +147,9 @@ function Confirmar({
   disabled: boolean;
   children: React.ReactNode;
 }) {
+  const [aberto, setAberto] = useState(false);
   return (
-    <AlertDialog>
+    <AlertDialog open={aberto} onOpenChange={setAberto}>
       <AlertDialogTrigger
         render={
           <Button variant="destructive" size="lg" className="h-11 flex-1 text-base" disabled={disabled}>
@@ -165,7 +166,17 @@ function Confirmar({
           <AlertDialogCancel size="lg" className="h-11">
             Cancelar
           </AlertDialogCancel>
-          <AlertDialogAction variant="destructive" size="lg" className="h-11" onClick={onConfirmar}>
+          <AlertDialogAction
+            variant="destructive"
+            size="lg"
+            className="h-11"
+            disabled={disabled}
+            onClick={() => {
+              // Fecha na hora: evita um segundo clique enviar o pedido de novo.
+              setAberto(false);
+              onConfirmar();
+            }}
+          >
             {rotuloAcao}
           </AlertDialogAction>
         </AlertDialogFooter>

@@ -22,7 +22,7 @@ async function salvar(id: string | null, entrada: MedicaoEntrada): Promise<Resul
     return {
       ok: false,
       mensagem: "Confira os campos destacados.",
-      erros: resultado.error.flatten().fieldErrors,
+      erros: z.flattenError(resultado.error).fieldErrors,
     };
   }
   const dados = resultado.data;

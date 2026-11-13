@@ -1,3 +1,5 @@
+import { horaMinutoBrasilia } from "@/lib/datas";
+
 export const MOMENTOS = [
   { valor: "jejum", rotulo: "Jejum" },
   { valor: "antes_cafe", rotulo: "Antes do café da manhã" },
@@ -19,9 +21,10 @@ export function rotuloMomento(momento: Momento): string {
   return MOMENTOS.find((m) => m.valor === momento)?.rotulo ?? momento;
 }
 
-/** Sugere o momento da medição a partir da hora do dia (o usuário pode trocar). */
+/** Sugere o momento da medição a partir da hora do dia em Brasília (o usuário pode trocar). */
 export function sugerirMomento(data: Date): Momento {
-  const minutos = data.getHours() * 60 + data.getMinutes();
+  const { hora, minuto } = horaMinutoBrasilia(data);
+  const minutos = hora * 60 + minuto;
   if (minutos < 5 * 60) return "madrugada";
   if (minutos < 8 * 60) return "jejum";
   if (minutos < 10 * 60) return "depois_cafe";

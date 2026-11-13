@@ -1,5 +1,6 @@
 "use server";
 
+import { z } from "zod";
 import { revalidatePath } from "next/cache";
 import { obterUsuario } from "@/lib/auth";
 import { FAIXAS_PADRAO, type Faixas } from "@/lib/glicemia/classificar";
@@ -71,7 +72,7 @@ export async function salvarFaixas(
   if (!resultado.success) {
     return {
       mensagem: "Confira os valores destacados.",
-      erros: resultado.error.flatten().fieldErrors,
+      erros: z.flattenError(resultado.error).fieldErrors,
       valores,
     };
   }

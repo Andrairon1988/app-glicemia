@@ -1,5 +1,6 @@
 "use server";
 
+import { z } from "zod";
 import { redirect } from "next/navigation";
 import { obterUsuario } from "@/lib/auth";
 import { criarClienteServidor } from "@/lib/supabase/server";
@@ -8,6 +9,8 @@ import { boasVindasSchema } from "@/lib/validacao";
 export type EstadoFormulario = {
   erros?: Record<string, string[] | undefined>;
   mensagem?: string;
+  /** Nome digitado, para não se perder quando houver erro. */
+  nome_paciente?: string;
 };
 
 /** Primeiro acesso: grava o nome do paciente e o aceite dos termos. */
@@ -17,12 +20,13 @@ export async function concluirBoasVindas(
 ): Promise<EstadoFormulario> {
   const usuario = await obterUsuario();
 
+  const nome = String(formData.get("nome_paciente") ?? "");
   const resultado = boasVindasSchema.safeParse({
-    nome_paciente: formData.get("nome_paciente"),
+    nome_paciente: nome,
     aceite: formData.get("aceite") ?? undefined,
   });
   if (!resultado.success) {
-    return { erros: resultado.error.flatten().fieldErrors };
+    return { erros: z.flattenError(resultado.error).fieldErrors, nome_paciente: nome };
   }
 
   const supabase = await criarClienteServidor();
@@ -35,7 +39,7 @@ export async function concluirBoasVindas(
     .eq("id", usuario.id);
 
   if (error) {
-    return { mensagem: "Não foi possível salvar. Tente novamente." };
+    return { mensagem: "Não foi possível salvar. Tente novamente.", nome_paciente: nome };
   }
 
   redirect("/");

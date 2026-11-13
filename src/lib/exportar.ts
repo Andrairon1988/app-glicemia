@@ -11,9 +11,15 @@ type MedicaoCsv = {
   observacao: string | null;
 };
 
-/** Escapa um campo para CSV (aspas, separador e quebras de linha). */
+/**
+ * Escapa um campo para CSV (aspas, separador e quebras de linha).
+ * Texto que começa com = + - @ (ou tab/CR) seria lido pelo Excel como FÓRMULA
+ * ("injeção de fórmula"): recebe um apóstrofo na frente para virar texto.
+ */
 function campo(valor: string | number | null): string {
-  const texto = valor === null ? "" : String(valor);
+  if (typeof valor === "number") return String(valor);
+  let texto = valor ?? "";
+  if (/^[=+\-@\t\r]/.test(texto)) texto = `'${texto}`;
   return /[";\n\r]/.test(texto) ? `"${texto.replace(/"/g, '""')}"` : texto;
 }
 

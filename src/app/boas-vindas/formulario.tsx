@@ -20,9 +20,10 @@ export function FormularioBoasVindas({ nomeInicial }: { nomeInicial: string }) {
           Nome do paciente
         </Label>
         <Input
+          key={estado.nome_paciente ?? nomeInicial}
           id="nome_paciente"
           name="nome_paciente"
-          defaultValue={nomeInicial}
+          defaultValue={estado.nome_paciente ?? nomeInicial}
           autoComplete="name"
           className="h-12 text-base"
           aria-invalid={Boolean(estado.erros?.nome_paciente)}

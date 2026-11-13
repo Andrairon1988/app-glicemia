@@ -111,8 +111,8 @@ Dados de saúde são **dados pessoais sensíveis** na LGPD (art. 11).
 | Estilo / UI | **Tailwind CSS + shadcn/ui** | Responsivo, tema claro/escuro nativo, componentes acessíveis (baseados em Radix). |
 | Formulários / validação | **React Hook Form + Zod** | Validação do valor da glicemia (20–600) no cliente e no servidor. |
 | Gráficos (Fase 2) | **Recharts** | Simples e bem integrado ao React. |
-| Datas | **date-fns** (locale pt-BR) | Formatação dd/mm/aaaa e cálculos de período. |
-| PDF (Fase 3) | **@react-pdf/renderer** | Gera o relatório para o médico. |
+| Datas | **Intl (nativo do JavaScript)**, fuso America/Sao_Paulo | Formatação dd/mm/aaaa, agrupamento por dia e campo do formulário sempre no horário de Brasília (sem biblioteca extra). |
+| PDF (Fase 3) | **Página de impressão** (CSS `@media print`, A4) | O usuário usa "Imprimir → Salvar como PDF"; inclui o gráfico e funciona em qualquer aparelho. Mais planilha CSV. |
 | Hospedagem | **Vercel** (app) + **Supabase** (banco/auth) | Planos gratuitos e deploy automático a partir do GitHub. |
 | Versionamento | **Git + GitHub** | Repositório público para o portfólio. |
 

@@ -1,6 +1,6 @@
 "use client";
 
-import { useLayoutEffect, useState } from "react";
+import { useState } from "react";
 import { TriangleAlert } from "lucide-react";
 import { excluirConta } from "@/app/actions/compartilhamento";
 import {
@@ -23,12 +23,6 @@ export function ExcluirConta() {
   const [texto, setTexto] = useState("");
   const [erro, setErro] = useState<string | null>(null);
   const [excluindo, setExcluindo] = useState(false);
-
-  // Ao esconder a tela, limpa o que foi digitado.
-  useLayoutEffect(() => () => {
-    setTexto("");
-    setErro(null);
-  }, []);
 
   async function confirmar() {
     setExcluindo(true);

@@ -1,6 +1,5 @@
 "use client";
 
-import { Suspense } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ChartLine, History, House, Plus, Settings } from "lucide-react";
@@ -14,30 +13,13 @@ const ITENS = [
   { href: "/configuracoes", rotulo: "Configurações", rotuloCurto: "Ajustes", Icone: Settings },
 ] as const;
 
-// O endereço atual só é conhecido na hora do acesso: enquanto isso,
-// a navegação aparece sem item destacado (fallback do Suspense).
+// O item da tela atual fica destacado (aria-current="page").
 export function NavegacaoTopo() {
-  return (
-    <Suspense fallback={<Topo pathname={null} />}>
-      <ComEndereco Componente={Topo} />
-    </Suspense>
-  );
+  return <Topo pathname={usePathname()} />;
 }
 
 export function NavegacaoInferior() {
-  return (
-    <Suspense fallback={<Inferior pathname={null} />}>
-      <ComEndereco Componente={Inferior} />
-    </Suspense>
-  );
-}
-
-function ComEndereco({
-  Componente,
-}: {
-  Componente: (props: { pathname: string | null }) => React.ReactNode;
-}) {
-  return <Componente pathname={usePathname()} />;
+  return <Inferior pathname={usePathname()} />;
 }
 
 /** Desktop: links no topo. */

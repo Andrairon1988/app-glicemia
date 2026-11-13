@@ -18,6 +18,23 @@ describe("medicaoSchema", () => {
   it("rejeita momento desconhecido", () => {
     expect(medicaoSchema.safeParse({ ...base, momento: "lanche" }).success).toBe(false);
   });
+
+  const mensagem = (dados: Record<string, unknown>) =>
+    medicaoSchema.safeParse({ ...base, ...dados }).error?.issues[0]?.message;
+
+  it("mensagens claras para valor vazio, com vírgula ou com letras", () => {
+    expect(mensagem({ valor_mg_dl: "" })).toBe("Informe o valor da glicemia.");
+    expect(mensagem({ valor_mg_dl: "12,5" })).toBe("Use um número inteiro, sem vírgula.");
+    expect(mensagem({ valor_mg_dl: "abc" })).toBe("Digite apenas números.");
+    expect(mensagem({ valor_mg_dl: "15" })).toBe("O valor mínimo é 20 mg/dL.");
+  });
+
+  it("rejeita data no futuro (com tolerância de alguns minutos)", () => {
+    const amanha = new Date(Date.now() + 24 * 3600 * 1000).toISOString();
+    expect(mensagem({ medido_em: amanha })).toBe("A data e a hora não podem estar no futuro.");
+    const daquiAUmMinuto = new Date(Date.now() + 60 * 1000).toISOString();
+    expect(medicaoSchema.safeParse({ ...base, medido_em: daquiAUmMinuto }).success).toBe(true);
+  });
 });
 
 describe("faixasSchema", () => {

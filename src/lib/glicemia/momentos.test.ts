@@ -1,7 +1,9 @@
 import { describe, expect, it } from "vitest";
 import { rotuloMomento, sugerirMomento } from "./momentos";
 
-const as = (h: number, m = 0) => new Date(2026, 0, 1, h, m);
+// Horários explícitos de Brasília: o resultado não depende do fuso do computador.
+const as = (h: number, m = 0) =>
+  new Date(`2026-01-01T${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")}:00-03:00`);
 
 describe("sugerirMomento", () => {
   it.each([

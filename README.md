@@ -69,7 +69,7 @@ src/
 supabase/migrations/  estrutura do banco
 ```
 
-## Próximas fases
+## Fases do projeto
 
 - ✅ **Fase 2 (análise):** aba Resumo com tempo na meta, distribuição por faixa, indicadores, gráfico de evolução e média por momento.
 - ✅ **Fase 3 (compartilhamento e LGPD):** relatório para impressão/PDF e planilha CSV, links somente leitura para familiares (sem observações, com validade e desativação), exportação de todos os dados e exclusão da conta.

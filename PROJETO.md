@@ -1,6 +1,6 @@
 # Projeto: App Web de Acompanhamento de Glicemia
 
-> Documento de premissas do projeto, construído por entrevista. Status: **Fase 1 (MVP) publicada** em https://app-glicemia-ten.vercel.app (12/11/2026). Código: https://github.com/Andrairon1988/app-glicemia. Andamento na seção 9.1 e pontos em aberto na seção 11.
+> Documento de premissas do projeto, construído por entrevista. Status: **projeto concluído** (13/11/2026): Fases 1, 2 e 3 publicadas em https://app-glicemia-ten.vercel.app, com revisão de segurança e qualidade. Código: https://github.com/Andrairon1988/app-glicemia.
 
 ## 1. Visão geral
 - **O que é:** aplicação web para registrar e acompanhar medições de glicemia (nível de açúcar no sangue).
@@ -144,7 +144,7 @@ Dados de saúde são **dados pessoais sensíveis** na LGPD (art. 11).
 |---|---|
 | Fase 1: MVP | ✅ Concluída e publicada em 12/11/2026 |
 | Fase 2: Análise | ✅ Concluída em 13/11/2026: aba "Resumo" com % na meta, distribuição por faixa, indicadores (média, mín., máx., nº de medições, hipo/hiper), gráfico de evolução e média por momento. |
-| Fase 3: Compartilhamento e LGPD | 🧪 Publicada em 13/11/2026: relatório para impressão/PDF, planilha CSV, links somente leitura para familiares (com validade, desativação e último acesso), exportação de todos os dados (JSON) e exclusão da conta. Aguardando validação final. |
+| Fase 3: Compartilhamento e LGPD | ✅ Concluída em 13/11/2026: relatório para impressão/PDF, planilha CSV, links somente leitura para familiares (com validade, desativação e último acesso), exportação de todos os dados (JSON) e exclusão da conta. |
 
 **Decisões tomadas durante a Fase 1:**
 - Horários exibidos sempre no fuso de Brasília (America/Sao_Paulo).

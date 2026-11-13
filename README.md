@@ -71,7 +71,7 @@ supabase/migrations/  estrutura do banco
 
 ## Próximas fases
 
-- **Fase 2 (análise):** gráfico de evolução e painel de resumo (média, % na meta, nº de hipo/hiperglicemias).
+- ✅ **Fase 2 (análise):** aba Resumo com tempo na meta, distribuição por faixa, indicadores, gráfico de evolução e média por momento.
 - **Fase 3 (compartilhamento e LGPD):** relatório PDF/CSV para o médico, link somente leitura para familiares, exportação e exclusão da conta.
 
 As premissas completas do projeto estão em [`PROJETO.md`](PROJETO.md).
